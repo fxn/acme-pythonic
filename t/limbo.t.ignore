@@ -1,0 +1,53 @@
+# ----------------------------------------------------------------------
+
+# From "Mastering Algorithms with Perl", page 403.
+sub literal    ($)
+sub emit       ($;$)
+sub expression ()
+sub error      ($)
+
+my $emit  = ''
+my $error = ''
+
+sub literal ($):
+    my $lit = $_[0]
+    return s/^\s*\Q$lit\E\b\s*//
+
+sub emit ($;$):
+    unless $error:
+        if @_ == 2:
+            my ($in, $out) = (literal($_[0]), $_[1])
+            $emit .= $out if $in
+            return $in
+        else:
+            $emit .= $_[0]
+
+sub expression ():
+    do:
+        do:
+            if literal '(':
+                emit '('
+                expression
+                error 'missing )' unless literal ')'
+                emit ' )'
+            elsif literal 'not':
+                error 'empty negation' if $_ eq ''
+                emit '! '
+                expression
+            else:
+                if s/^\s*(\S+)\s*// || s/^\s*"(\S+?)"\s*//:
+                    my $word = $1
+                    if $word =~ /^(not|and|or)$/:
+                        error "word '$word' cannot be a search word"
+                    else:
+                        emit "/$word/i"
+        while emit 'and', ' && '
+    while emit 'or', ' || '
+
+sub error ($$):
+    my $msg = $_[0]
+    $error = "$msg: $_" if $error eq ''
+
+$_ = 'abc and not (def or gui)'
+expression
+is $emit, '/abc/ && ! (/def/ || /gui/)'
