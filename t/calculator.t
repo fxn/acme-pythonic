@@ -41,15 +41,15 @@ sub expr:
     my $get = shift
     my $left = term($get)
     while:
-        $left += term(1), last if $curr_tok eq PLUS
-        $left -= term(1), last if $curr_tok eq MINUS
+        $left += term(1) if $curr_tok eq PLUS
+        $left -= term(1) if $curr_tok eq MINUS
         return $left
 
 sub term:
     my $get = shift
     my $left = prim($get)
     while:
-        $left *= prim(1), last if $curr_tok eq MUL
+        $left *= prim(1) if $curr_tok eq MUL
         if $curr_tok eq DIV:
             if my $d = prim(1):
                 $left *= $d**(-1) # Filter::Simple eated too much with conventional notation

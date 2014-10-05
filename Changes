@@ -1,5 +1,8 @@
 Revision history for Perl extension Acme::Pythonic.
 
+0.47 Sun Oct  5 23:22:33 CEST 2014
+    - Fixes a test that became broken in recent perls.
+
 0.46 Tue Sep 11 21:57:37 2007
     - Fixed a test about $^V on t/constant.t that prevented skipping
       the tests on 5.6.2, were they are not expected to work.
@@ -142,4 +145,3 @@ Revision history for Perl extension Acme::Pythonic.
 0.01  Mon May 17 23:14:00 2004
 	- original version; created by h2xs 1.23 with options
 		-XA -n Acme::Pythonic
-
